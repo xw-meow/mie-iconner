@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:mie-iconner}",
+            "name": "Debug mie-iconner",
+            "target": "mie-iconner",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug mie-iconner"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:mie-iconner}",
+            "name": "Release mie-iconner",
+            "target": "mie-iconner",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release mie-iconner"
+        }
+    ]
+}
