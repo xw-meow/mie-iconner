@@ -8,6 +8,8 @@
 	<string>mie-iconner</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>CFBundleIconFile</key>
+	<string>AppIcon</string>
 	<key>CFBundleName</key>
 	<string>小羊贴纸铺</string>
 	<key>CFBundleDisplayName</key>
