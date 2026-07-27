@@ -7,13 +7,38 @@ struct ToastMessage: Equatable {
 }
 
 struct ContentView: View {
+    // 预置图标资源包的位置因运行方式而异:
+    // - swift run / 裸二进制: 与可执行文件同目录(SPM 标准布局)
+    // - .app: Contents/Resources(标准位置,放 .app 根会让 codesign 失败)
+    // 注意两点:
+    // - 不能用 Bundle.module:找不到包时它直接 fatalError
+    // - 必须通过 Bundle.resourceURL 取资源目录:release 构建的 .bundle
+    //   是标准 bundle 结构(资源在 Contents/Resources 下),而 debug
+    //   构建是扁平目录,手动拼路径只对一边成立
+    private static func bundledIconsURL() -> URL? {
+        let bundleName = "mie-iconner_mie-iconner.bundle"
+        let candidates = [
+            Bundle.main.resourceURL, // .app → Contents/Resources
+            Bundle.main.bundleURL,   // 裸二进制 → 可执行文件所在目录
+        ]
+        for base in candidates {
+            guard let bundleURL = base?.appendingPathComponent(bundleName),
+                  let bundle = Bundle(url: bundleURL),
+                  let resourceURL = bundle.resourceURL else { continue }
+            let dir = resourceURL.appendingPathComponent("BundledIcons")
+            if FileManager.default.fileExists(atPath: dir.path) {
+                return dir
+            }
+        }
+        return nil
+    }
+
     @State private var browser = FolderBrowserViewModel(
         startURL: FileManager.default.homeDirectoryForCurrentUser
             .appendingPathComponent("Desktop")
     )
     @State private var iconStore = IconLibraryStore(
-        bundledIconsURL: Bundle.module.resourceURL?
-            .appendingPathComponent("BundledIcons"),
+        bundledIconsURL: bundledIconsURL(),
         customIconsURL: FileManager.default
             .urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("mie-iconner/CustomIcons")
