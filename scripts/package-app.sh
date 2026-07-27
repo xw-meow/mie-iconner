@@ -1,9 +1,9 @@
 #!/bin/bash
 # 打包 小羊贴纸铺.app:
 #   1. swift build 出 universal(arm64 + x86_64)release 二进制
-#   2. 组装 .app  bundle(资源包放 .app 根,对齐 Bundle.module 的查找路径)
+#   2. 组装 .app bundle(资源包放 Contents/Resources,codesign 才认)
 #   3. ad-hoc 签名(无开发者证书,用户首次打开需右键→打开)
-#   4. ditto 压成 zip(保资源叉,供 GitHub Release 分发)
+#   4. 出 DMG(带 Applications 软链,拖拽安装,供 GitHub Release 分发)
 #
 # 用法: scripts/package-app.sh [输出目录,默认 dist]
 set -euo pipefail
@@ -38,10 +38,17 @@ echo "==> ad-hoc 签名"
 codesign --force --sign - "$APP_DIR/Contents/Resources/$RESOURCE_BUNDLE"
 codesign --force --sign - "$APP_DIR"
 
-echo "==> 压缩 zip"
+echo "==> 生成 DMG"
 mkdir -p "$OUT_DIR"
-ZIP="$OUT_DIR/$APP_NAME-macOS.zip"
-rm -f "$ZIP"
-ditto -c -k --sequesterRsrc --keepParent "$APP_DIR" "$ZIP"
+DMG="$OUT_DIR/$APP_NAME-macOS.dmg"
+STAGING="$OUT_DIR/dmg-staging"
+rm -f "$DMG"
+rm -rf "$STAGING"
+mkdir -p "$STAGING"
+cp -R "$APP_DIR" "$STAGING/"
+ln -s /Applications "$STAGING/Applications"
+hdiutil create -volname "$APP_NAME" -srcfolder "$STAGING" \
+    -ov -format UDZO -imagekey zlib-level=9 "$DMG" >/dev/null
+rm -rf "$STAGING"
 
-echo "==> 完成: $ZIP"
+echo "==> 完成: $DMG"
