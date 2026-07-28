@@ -51,7 +51,7 @@
 
 ```bash
 git clone git@github.com:xw-meow/mie-iconner.git
-cd mie-iconner
+cd mie-iconner/app
 swift run mie-iconner
 ```
 
@@ -96,11 +96,14 @@ swift run mie-iconner
 - **系统语言跟随**:内嵌 `Info.plist`,菜单栏与系统面板自动使用系统语言
 
 ```
-Sources/
-├── mie-iconner/        # SwiftUI 界面(视图、设计 token、资源)
-└── MieIconnerCore/     # 无 UI 依赖的核心:图标读写、路径、图标库
-Tests/
-└── MieIconnerCoreTests/
+app/                    # macOS 应用(SwiftPM)
+├── Sources/
+│   ├── mie-iconner/        # SwiftUI 界面(视图、设计 token、资源)
+│   └── MieIconnerCore/     # 无 UI 依赖的核心:图标读写、路径、图标库
+├── Tests/
+│   └── MieIconnerCoreTests/
+└── scripts/            # 打包脚本
+site/                   # 官网 / 介绍站点(Vite + React)
 ```
 
 <br />

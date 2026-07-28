@@ -16,18 +16,19 @@ jobs:
           fetch-depth: 0
 
       - name: Run tests
+        working-directory: app
         run: swift test
 
       - name: Package .app
-        run: scripts/package-app.sh
+        run: app/scripts/package-app.sh
 
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          VERSION=$(/usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' Sources/mie-iconner/Info.plist)
+          VERSION=$(/usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' app/Sources/mie-iconner/Info.plist)
           TAG="v${VERSION}-build.${GITHUB_RUN_NUMBER}"
           # --generate-notes 自动以上一个 tag 为起点汇总提交记录
-          gh release create "$TAG" "dist/小羊贴纸铺-macOS.dmg" \
+          gh release create "$TAG" "app/dist/小羊贴纸铺-macOS.dmg" \
             --title "小羊贴纸铺 v${VERSION} (build ${GITHUB_RUN_NUMBER})" \
             --generate-notes
