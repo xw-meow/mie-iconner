@@ -1,8 +1,9 @@
 name: Release
 
+# 手动触发:Actions → Release → Run workflow
+# (自动跑 macOS runner 太消耗额度,改为需要发版时手动点)
 on:
-  push:
-    branches: [master]
+  workflow_dispatch:
 
 permissions:
   contents: write
