@@ -85,4 +85,9 @@ rm -rf "$MOUNT_ROOT"
 hdiutil convert "$RW_DMG" -format UDZO -imagekey zlib-level=9 -ov -o "$DMG" >/dev/null
 rm -f "$RW_DMG" "$ICNS"
 
+# 给 .dmg 文件本身也贴上小羊图标(仅本地/Finder 可见;
+# 资源叉在浏览器下载时会被剥掉,不影响分发后的卷标图标)
+echo "==> 给 DMG 文件贴图标"
+swift scripts/set-file-icon.swift "Sources/icon.png" "$DMG"
+
 echo "==> 完成: $DMG"
