@@ -158,6 +158,10 @@ struct ContentView: View {
     }
 }
 
-#Preview {
-    ContentView()
+// 用 PreviewProvider 而非 #Preview 宏:宏插件 PreviewsMacros
+// 只随完整 Xcode 分发,CLT 环境下 swift build 会直接失败
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }

@@ -482,8 +482,12 @@ private final class WindowFrameReporterView: NSView {
     }
 }
 
-#Preview {
-    PathBar(browser: FolderBrowserViewModel(
-        startURL: FileManager.default.homeDirectoryForCurrentUser),
-            onRefresh: {})
+// 用 PreviewProvider 而非 #Preview 宏:宏插件 PreviewsMacros
+// 只随完整 Xcode 分发,CLT 环境下 swift build 会直接失败
+struct PathBar_Previews: PreviewProvider {
+    static var previews: some View {
+        PathBar(browser: FolderBrowserViewModel(
+            startURL: FileManager.default.homeDirectoryForCurrentUser),
+                onRefresh: {})
+    }
 }
