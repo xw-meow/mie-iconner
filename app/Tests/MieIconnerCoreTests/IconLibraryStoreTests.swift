@@ -75,10 +75,15 @@ final class IconLibraryStoreTests: XCTestCase {
         try FileManager.default.createDirectory(at: work, withIntermediateDirectories: true)
         try Self.makePNG().write(to: work.appendingPathComponent("d.png"))
         let store = makeStore()
-        // 无 config 时纯按 localizedStandardCompare 排序(本机
-        // 中文 collation 下汉字排在拉丁字母前);根目录散图归入的
-        // default 也只是普通分类,没有特权位
-        XCTAssertEqual(store.bundledCategories.map(\.name), ["动物", "default"])
+        // 无 config 时纯按 localizedStandardCompare 排序;根目录散图归入的
+        // default 也只是普通分类,没有特权位。注意排序结果随系统 locale
+        // 变化(中文 collation 汉字在前,英文在后),不能写死顺序,
+        // 用同一比较器算期望值——既 locale 无关,又正好验证"无特权":
+        // 一旦 default 被置顶/置底,就会与纯排序结果不符
+        let expected = ["动物", "default"].sorted {
+            $0.localizedStandardCompare($1) == .orderedAscending
+        }
+        XCTAssertEqual(store.bundledCategories.map(\.name), expected)
         XCTAssertEqual(store.customCategories.map(\.name), ["工作"])
     }
 
