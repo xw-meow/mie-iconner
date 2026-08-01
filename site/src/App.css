@@ -354,10 +354,22 @@
 
 .packs-layout > .reveal {
   display: flex;
+  align-items: center;
 }
 
-.packs-layout .img-placeholder {
-  flex: 1;
+/* 界面截图:白卡相框 + 暖调投影 */
+.shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-l);
+  box-shadow: 0 10px 30px var(--card-shadow);
+}
+
+.hero-shot .shot {
+  box-shadow: 0 18px 44px rgba(122, 92, 62, 0.16);
 }
 
 .sticker-grid-card {

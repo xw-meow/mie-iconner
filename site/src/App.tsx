@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import './App.css'
-import ImagePlaceholder from './components/ImagePlaceholder'
 
 const GITHUB_URL = 'https://github.com/xw-meow/mie-iconner'
 const RELEASES_URL = `${GITHUB_URL}/releases`
@@ -97,11 +96,10 @@ export default function App() {
           </div>
 
           <div className="hero-shot reveal">
-            <ImagePlaceholder
-              title="应用主界面全景"
-              description="浅色模式下完整窗口截图:左侧贴纸库(展开一两个分类、有一张选中态贴纸),右侧文件夹浏览器。带原生窗口阴影,背景留点呼吸空间。"
-              size="1600 × 1000 PNG(或 2x 截图)"
-              ratio="16 / 10"
+            <img
+              className="shot"
+              src="/shower/a1.png"
+              alt="小羊贴纸铺主界面:左侧贴纸库,右侧文件夹浏览器"
             />
           </div>
         </section>
@@ -152,11 +150,10 @@ export default function App() {
             ))}
           </ol>
           <div className="reveal">
-            <ImagePlaceholder
-              title="应用流程演示"
-              description="横向动图或连环截图:选中贴纸 → 选中文件夹 → 点击「应用」 → 桌面上的文件夹图标即时变化。节奏轻快,突出应用前后的对比。"
-              size="1600 × 600 GIF / 视频封面"
-              ratio="21 / 9"
+            <img
+              className="shot"
+              src="/shower/a2.png"
+              alt="选中贴纸和文件夹后点击「应用」,桌面上的文件夹图标即时更换"
             />
           </div>
         </section>
@@ -177,11 +174,10 @@ export default function App() {
               <p className="sticker-grid-caption">铺子里的部分贴纸</p>
             </div>
             <div className="reveal" style={{ transitionDelay: '90ms' }}>
-              <ImagePlaceholder
-                title="贴纸库界面"
-                description="贴纸库局部截图:展开一个贴纸分类,其中一张贴纸处于选中态(柿子橙描边)。可适度放大,看清细节。"
-                size="1200 × 900 PNG"
-                ratio="4 / 3"
+              <img
+                className="shot"
+                src="/shower/custom-import.png"
+                alt="「自定义」分类支持导入自己的图片作为贴纸"
               />
             </div>
           </div>
