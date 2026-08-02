@@ -195,6 +195,23 @@ export default function App() {
               下载 DMG
             </a>
           </div>
+          <div className="card open-help reveal" style={{ transitionDelay: '90ms' }}>
+            <h3>首次打开:请右键点按「打开」</h3>
+            <p>
+              小羊贴纸铺是一款免费开源的小工具,而 Apple 开发者认证每年需要 99
+              美元,对这样一个小工具来说并不划算,所以我们没有做公证。首次打开时系统可能提示「无法验证开发者」,这属于正常现象,按下面的步骤操作一次即可。
+            </p>
+            <ol className="open-help-steps">
+              <li>双击下载好的 DMG 安装包,把 小羊贴纸铺 拖进「应用程序」文件夹;</li>
+              <li>打开「访达」,点按左侧边栏中的「应用程序」;</li>
+              <li>找到 小羊贴纸铺,按住 Control 点按它的图标(或直接右键点按),选择「打开」;</li>
+              <li>在弹出的窗口中再点一次「打开」。</li>
+            </ol>
+            <p className="open-help-note">
+              只需这一次,之后双击即可正常打开。如果系统提示「已损坏,无法打开」,请前往「系统设置 →
+              隐私与安全性」,点按页面下方的「仍要打开」。
+            </p>
+          </div>
         </section>
       </main>
 

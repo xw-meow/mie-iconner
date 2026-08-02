@@ -423,6 +423,37 @@
   margin-top: 4px;
 }
 
+/* ---------------- 首次打开帮助 ---------------- */
+.open-help {
+  margin-top: 20px;
+  padding: 28px 32px;
+}
+
+.open-help h3 {
+  font-size: 18px;
+}
+
+.open-help > p {
+  margin-top: 10px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--ink-2);
+}
+
+.open-help-steps {
+  margin: 14px 0 0;
+  padding-left: 22px;
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.open-help-note {
+  margin-top: 14px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink-3);
+}
+
 /* ---------------- 页脚 ---------------- */
 .footer {
   padding: 56px 0 40px;
