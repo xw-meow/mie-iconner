@@ -1,27 +1,66 @@
-import { useEffect } from 'react'
+import { useEffect, type SyntheticEvent } from 'react'
 import './App.css'
 
 const GITHUB_URL = 'https://github.com/xw-meow/mie-iconner'
 const RELEASES_URL = `${GITHUB_URL}/releases`
 
+// 站点部署在子路径下(GitHub Pages 项目页),JSX 里的
+// 绝对路径不会自动带 base 前缀,资源地址统一从这里拼
+const asset = (p: string) => `${import.meta.env.BASE_URL}${p}`
+
+// 图片加载失败时的兜底:换成与整站配色一致的虚线框
+// 占位图(data URI),占位而不是塌陷,布局不会乱
+function placeholderSvg(w: number, h: number) {
+  const r = Math.min(14, w / 8)
+  const emojiSize = Math.max(22, Math.min(w, h) / 3.2)
+  const svg =
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">` +
+    `<rect width="${w}" height="${h}" rx="${r}" fill="#F3EDE2"/>` +
+    `<rect x="5" y="5" width="${w - 10}" height="${h - 10}" rx="${Math.max(4, r - 4)}" ` +
+    `fill="none" stroke="#D8D0C0" stroke-width="2" stroke-dasharray="7 6"/>` +
+    `<text x="${w / 2}" y="${h / 2}" font-size="${emojiSize}" text-anchor="middle" ` +
+    `dominant-baseline="central">🐑</text>` +
+    `</svg>`
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
+}
+
+function handleImgError(e: SyntheticEvent<HTMLImageElement>) {
+  const el = e.currentTarget
+  // data-fallback 防呆:占位图本身再失败也不进入死循环
+  if (el.dataset.fallback) return
+  el.dataset.fallback = '1'
+  const w = el.clientWidth || 320
+  // 截图类大图高度是 auto,加载失败后 clientHeight 只是 alt
+  // 文本残影,不可信;用 data-fallback-aspect 声明的宽高比推算
+  const aspect = el.dataset.fallbackAspect
+  let h: number
+  if (aspect) {
+    const [aw, ah] = aspect.split('/').map(Number)
+    h = Math.round((w * ah) / aw)
+  } else {
+    h = el.clientHeight > 0 ? el.clientHeight : Math.round(w * 0.62)
+  }
+  el.src = placeholderSvg(w, h)
+}
+
 const features = [
   {
-    icon: '/stickers/paint.png',
+    icon: asset('stickers/paint.png'),
     title: '贴纸库',
     desc: '100 多张内置贴纸随取随用;也可以把自己的图片拖进来,建成自己的分类。',
   },
   {
-    icon: '/stickers/inspect.png',
+    icon: asset('stickers/inspect.png'),
     title: '桌面式浏览',
     desc: '右侧就是你的桌面:双击进入文件夹,输入路径可以直接跳转,还有自动补全。',
   },
   {
-    icon: '/stickers/wink.png',
+    icon: asset('stickers/wink.png'),
     title: '一键应用 / 还原',
     desc: '选中贴纸和文件夹,点一下「应用」就贴好了;看腻了,点「还原」随时换回来。',
   },
   {
-    icon: '/stickers/serious.png',
+    icon: asset('stickers/serious.png'),
     title: '与桌面同步',
     desc: '你看到的就是桌面上的样子:图标状态和 Finder 实时一致,刷新一下立刻对齐。',
   },
@@ -60,7 +99,7 @@ export default function App() {
     <div className="page">
       <header className="nav">
         <a className="nav-brand" href="#top">
-          <img src="/icon.png" alt="小羊贴纸铺图标" className="nav-logo" />
+          <img src={asset('icon.png')} alt="小羊贴纸铺图标" className="nav-logo" onError={handleImgError} />
           <span className="nav-name">小羊贴纸铺</span>
         </a>
         <nav className="nav-links">
@@ -77,9 +116,9 @@ export default function App() {
       <main id="top">
         {/* ================= Hero ================= */}
         <section className="hero">
-          <img className="hero-sticker hero-sticker-1" src="/stickers/wave.png" alt="" aria-hidden />
-          <img className="hero-sticker hero-sticker-2" src="/stickers/happy.png" alt="" aria-hidden />
-          <img className="hero-sticker hero-sticker-3" src="/stickers/wow.png" alt="" aria-hidden />
+          <img className="hero-sticker hero-sticker-1" src={asset('stickers/wave.png')} alt="" aria-hidden onError={handleImgError} />
+          <img className="hero-sticker hero-sticker-2" src={asset('stickers/happy.png')} alt="" aria-hidden onError={handleImgError} />
+          <img className="hero-sticker hero-sticker-3" src={asset('stickers/wow.png')} alt="" aria-hidden onError={handleImgError} />
 
           <span className="hero-badge">macOS 14+ · SwiftUI · 免费开源</span>
           <h1>给文件夹贴上贴纸</h1>
@@ -98,8 +137,10 @@ export default function App() {
           <div className="hero-shot reveal">
             <img
               className="shot"
-              src="/shower/a1.png"
+              src={asset('shower/a1.png')}
               alt="小羊贴纸铺主界面:左侧贴纸库,右侧文件夹浏览器"
+              data-fallback-aspect="16/10"
+              onError={handleImgError}
             />
           </div>
         </section>
@@ -108,7 +149,7 @@ export default function App() {
         <div className="marquee" aria-hidden>
           <div className="marquee-track">
             {[...marqueeStickers, ...marqueeStickers].map((name, i) => (
-              <img key={i} src={`/stickers/${name}.png`} alt="" loading="lazy" />
+              <img key={i} src={asset(`stickers/${name}.png`)} alt="" loading="lazy" onError={handleImgError} />
             ))}
           </div>
         </div>
@@ -124,7 +165,7 @@ export default function App() {
                 style={{ transitionDelay: `${i * 70}ms` }}
               >
                 <span className="feature-icon">
-                  <img src={f.icon} alt="" />
+                  <img src={f.icon} alt="" onError={handleImgError} />
                 </span>
                 <h3>{f.title}</h3>
                 <p>{f.desc}</p>
@@ -152,8 +193,10 @@ export default function App() {
           <div className="reveal">
             <img
               className="shot"
-              src="/shower/a2.png"
+              src={asset('shower/a2.png')}
               alt="选中贴纸和文件夹后点击「应用」,桌面上的文件夹图标即时更换"
+              data-fallback-aspect="16/10"
+              onError={handleImgError}
             />
           </div>
         </section>
@@ -168,7 +211,7 @@ export default function App() {
             <div className="card sticker-grid-card reveal">
               <div className="sticker-grid">
                 {marqueeStickers.map((name) => (
-                  <img key={name} src={`/stickers/${name}.png`} alt={`内置贴纸 ${name}`} loading="lazy" />
+                  <img key={name} src={asset(`stickers/${name}.png`)} alt={`内置贴纸 ${name}`} loading="lazy" onError={handleImgError} />
                 ))}
               </div>
               <p className="sticker-grid-caption">铺子里的部分贴纸</p>
@@ -176,8 +219,10 @@ export default function App() {
             <div className="reveal" style={{ transitionDelay: '90ms' }}>
               <img
                 className="shot"
-                src="/shower/custom-import.png"
+                src={asset('shower/custom-import.png')}
                 alt="「自定义」分类支持导入自己的图片作为贴纸"
+                data-fallback-aspect="16/10"
+                onError={handleImgError}
               />
             </div>
           </div>
@@ -186,7 +231,7 @@ export default function App() {
         {/* ================= 下载 ================= */}
         <section className="section" id="download">
           <div className="card download-card reveal">
-            <img src="/icon.png" alt="" className="download-icon" />
+            <img src={asset('icon.png')} alt="" className="download-icon" onError={handleImgError} />
             <h2 className="section-title">下载</h2>
             <p className="section-sub">
               免费开源 · 支持 macOS 14 Sonoma 及以上 · Apple Silicon 与 Intel 通用
