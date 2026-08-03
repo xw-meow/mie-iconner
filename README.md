@@ -1,6 +1,6 @@
 <div align="center">
 
-<br />
+<img src="imgs/icon.png" alt="小羊贴纸铺图标" width="140" />
 
 # 小羊贴纸铺 · mie-iconner
 
@@ -12,7 +12,7 @@
 [![Swift](https://img.shields.io/badge/Swift-5.9-F05138?style=flat-square&logo=swift&logoColor=white)](https://www.swift.org)
 [![SPM](https://img.shields.io/badge/SPM-Compatible-34C759?style=flat-square)](https://www.swift.org/package-manager/)
 
-<<::图片占位 应用主界面全景:左侧贴纸库 + 右侧文件夹浏览器::>>
+<img src="imgs/a1.png" alt="应用主界面全景:左侧贴纸库 + 右侧文件夹浏览器" width="820" />
 
 </div>
 
@@ -43,7 +43,9 @@
   </tr>
 </table>
 
-<<::图片占位 应用流程演示:选中贴纸 → 选中文件夹 → 点击应用 → 桌面即时生效::>>
+<p align="center">
+  <img src="imgs/a2.png" alt="应用流程演示:选中贴纸 → 选中文件夹 → 点击应用 → 桌面即时生效" width="820" />
+</p>
 
 <br />
 
@@ -83,7 +85,9 @@ swift run mie-iconner
 | `brandColor` | 徽标背景色 | `#0958d9` |
 | `defaultExpanded` | 是否默认展开 | `false` |
 
-<<::图片占位 图标库细节:分类徽标 + 作者链接 + 贴纸卡片选中态::>>
+<p align="center">
+  <img src="imgs/a3.png" alt="图标库细节:分类徽标 + 作者链接 + 贴纸卡片选中态" width="820" />
+</p>
 
 <br />
 
