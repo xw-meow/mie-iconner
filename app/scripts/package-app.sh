@@ -25,21 +25,31 @@ RESOURCES="$PRODUCTS_DIR/$RESOURCE_BUNDLE"
 [[ -f "$BINARY" ]] || { echo "找不到二进制: $BINARY" >&2; exit 1; }
 [[ -d "$RESOURCES" ]] || { echo "找不到资源包: $RESOURCES" >&2; exit 1; }
 
-# 从 Sources/icon.png 生成全尺寸 iconset → icns
-# (sips 逐档缩放,iconutil 合成;源图 1254×1254,覆盖 16~1024)
-echo "==> 生成 $ICON_NAME.icns"
-ICONSET="$OUT_DIR/AppIcon.iconset"
+# 从 png 生成全尺寸 iconset → icns
+# (sips 逐档缩放,iconutil 合成;覆盖 16~1024)
+# 用法: make_icns <源 png> <输出 icns>
+make_icns() {
+    local src="$1" out="$2"
+    local iconset="$OUT_DIR/tmp.iconset"
+    rm -rf "$iconset"
+    mkdir -p "$iconset"
+    for spec in "16 1" "32 2" "32 1" "64 2" "128 1" "256 2" "256 1" "512 2" "512 1" "1024 2"; do
+        read -r size scale <<< "$spec"
+        suffix=$([ "$scale" = "2" ] && echo "@2x" || echo "")
+        sips -z "$size" "$size" "$src" \
+            --out "$iconset/icon_${size}x${size}${suffix}.png" >/dev/null
+    done
+    iconutil -c icns "$iconset" -o "$out"
+    rm -rf "$iconset"
+}
+
+# 软件图标用 icon.png(满版带底色);安装包图标用 icon2.png(透明背景)
+echo "==> 生成 $ICON_NAME.icns(软件图标)"
 ICNS="$OUT_DIR/$ICON_NAME.icns"
-rm -rf "$ICONSET"
-mkdir -p "$ICONSET"
-for spec in "16 1" "32 2" "32 1" "64 2" "128 1" "256 2" "256 1" "512 2" "512 1" "1024 2"; do
-    read -r size scale <<< "$spec"
-    suffix=$([ "$scale" = "2" ] && echo "@2x" || echo "")
-    sips -z "$size" "$size" "Sources/icon.png" \
-        --out "$ICONSET/icon_${size}x${size}${suffix}.png" >/dev/null
-done
-iconutil -c icns "$ICONSET" -o "$ICNS"
-rm -rf "$ICONSET"
+make_icns "Sources/icon.png" "$ICNS"
+echo "==> 生成 VolumeIcon.icns(安装包图标)"
+VOLUME_ICNS="$OUT_DIR/VolumeIcon.icns"
+make_icns "Sources/icon2.png" "$VOLUME_ICNS"
 
 APP_DIR="$OUT_DIR/$APP_NAME.app"
 echo "==> 组装 $APP_DIR"
@@ -78,16 +88,16 @@ rm -rf "$MOUNT_ROOT"
 mkdir -p "$MOUNT_ROOT"
 hdiutil attach "$RW_DMG" -nobrowse -mountroot "$MOUNT_ROOT" >/dev/null
 MOUNT_DIR="$MOUNT_ROOT/$APP_NAME"
-cp "$ICNS" "$MOUNT_DIR/.VolumeIcon.icns"
+cp "$VOLUME_ICNS" "$MOUNT_DIR/.VolumeIcon.icns"
 SetFile -a C "$MOUNT_DIR"
 hdiutil detach "$MOUNT_DIR" -quiet
 rm -rf "$MOUNT_ROOT"
 hdiutil convert "$RW_DMG" -format UDZO -imagekey zlib-level=9 -ov -o "$DMG" >/dev/null
-rm -f "$RW_DMG" "$ICNS"
+rm -f "$RW_DMG" "$ICNS" "$VOLUME_ICNS"
 
-# 给 .dmg 文件本身也贴上小羊图标(仅本地/Finder 可见;
+# 给 .dmg 文件本身也贴上安装包图标(仅本地/Finder 可见;
 # 资源叉在浏览器下载时会被剥掉,不影响分发后的卷标图标)
 echo "==> 给 DMG 文件贴图标"
-swift scripts/set-file-icon.swift "Sources/icon.png" "$DMG"
+swift scripts/set-file-icon.swift "Sources/icon2.png" "$DMG"
 
 echo "==> 完成: $DMG"
