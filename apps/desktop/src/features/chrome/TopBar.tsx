@@ -63,7 +63,7 @@ export function TopBar() {
 
   return (
     <header
-      data-tauri-drag-region
+      data-tauri-drag-region="deep"
       className="relative z-30 flex h-14 shrink-0 select-none items-center gap-1.5 pl-[84px] pr-3"
     >
       <IconButton
