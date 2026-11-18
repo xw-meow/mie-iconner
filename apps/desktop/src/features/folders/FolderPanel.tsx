@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useRef } from 'react'
-import { FolderOpen, FolderSearch, FolderX, RefreshCw, Undo2 } from 'lucide-react'
+import { FolderSearch, FolderX, Undo2 } from 'lucide-react'
 
 import { Button } from '@/components/ui/Button'
 import { EmptyState } from '@/components/ui/EmptyState'
-import { IconButton } from '@/components/ui/IconButton'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { useApplyActions } from '@/features/apply/useApplyActions'
-import { Breadcrumbs } from '@/features/folders/Breadcrumbs'
 import { FolderCard } from '@/features/folders/FolderCard'
 import { useEnvQuery, useFoldersQuery } from '@/features/queries'
 import { api } from '@/lib/api'
@@ -25,8 +23,7 @@ export function FolderPanel({ actions }: FolderPanelProps) {
   const path = useBrowserStore((state) => state.path)
   const setPath = useBrowserStore((state) => state.setPath)
   const { data: env } = useEnvQuery()
-  const { data: folders, isLoading, isFetching, error, refetch } =
-    useFoldersQuery(path)
+  const { data: folders, isLoading, error, refetch } = useFoldersQuery(path)
   const clearSelection = useSelectionStore((state) => state.clear)
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -86,32 +83,7 @@ export function FolderPanel({ actions }: FolderPanelProps) {
   }
 
   return (
-    <section className="paper-panel relative flex min-w-0 flex-1 flex-col overflow-hidden rounded-panel">
-      <header className="relative flex h-[46px] shrink-0 items-center gap-2 border-b border-line/60 px-3.5">
-        <Breadcrumbs />
-        <div className="ml-auto flex shrink-0 items-center gap-1.5">
-          <span className="hidden text-[10.5px] tabular-nums text-ink-3 min-[1040px]:inline">
-            {folders?.length ?? 0} 个文件夹
-          </span>
-          <IconButton
-            label="打开其他文件夹…"
-            onClick={() => void handlePickFolder()}
-          >
-            <FolderOpen className="size-4" strokeWidth={1.9} />
-          </IconButton>
-          <IconButton
-            label="重新载入当前文件夹"
-            onClick={() => void refetch()}
-            loading={isFetching && !isLoading}
-          >
-            <RefreshCw className="size-3.5" strokeWidth={2.1} />
-          </IconButton>
-        </div>
-        {isFetching && !isLoading ? (
-          <span className="absolute inset-x-0 bottom-0 h-[2px] animate-pulse-soft bg-gradient-to-r from-transparent via-brand/60 to-transparent" />
-        ) : null}
-      </header>
-
+    <section className="paper-panel flex min-w-0 flex-1 flex-col overflow-hidden rounded-panel">
       <div
         ref={scrollRef}
         onMouseDown={handleBlankMouseDown}

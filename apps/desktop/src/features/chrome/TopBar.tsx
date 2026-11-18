@@ -15,8 +15,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
 import { IconButton } from '@/components/ui/IconButton'
@@ -108,6 +106,15 @@ export function TopBar() {
         <FolderSearch className="size-4" strokeWidth={1.9} />
       </IconButton>
 
+      <IconButton
+        label="刷新桌面图标"
+        variant="ghost"
+        loading={restartFinder.isPending}
+        onClick={() => setRefreshOpen(true)}
+      >
+        <RefreshCcw className="size-4" strokeWidth={1.9} />
+      </IconButton>
+
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button
@@ -119,21 +126,6 @@ export function TopBar() {
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>工具</DropdownMenuLabel>
-          <DropdownMenuItem
-            icon={<RefreshCcw className="size-3.5" />}
-            onSelect={() => setRefreshOpen(true)}
-          >
-            刷新桌面图标…
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            icon={<FolderOpen className="size-3.5" />}
-            disabled={!path}
-            onSelect={() => path && void revealInFinder(path)}
-          >
-            在访达中显示
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
           <DropdownMenuItem
             icon={<Info className="size-3.5" />}
             onSelect={() => setAboutOpen(true)}

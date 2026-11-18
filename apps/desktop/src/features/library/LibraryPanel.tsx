@@ -2,7 +2,6 @@ import { useCallback, useMemo, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ImagePlus, Plus, RefreshCw, SearchX } from 'lucide-react'
 
-import { CountPill } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -117,12 +116,9 @@ export function LibraryPanel() {
     <section className="paper-panel flex w-[344px] shrink-0 flex-col overflow-hidden rounded-panel pb-4">
       <header className="shrink-0 px-3.5 pb-2.5 pt-3.5">
         <div className="flex items-center justify-between gap-2">
-          <div className="flex min-w-0 items-baseline gap-2">
-            <h1 className="font-rounded text-[16px] font-bold tracking-[-0.01em] text-ink">
-              贴纸册
-            </h1>
-            <CountPill value={tab === 'system' ? totals.bundled : totals.custom} />
-          </div>
+          <h1 className="font-rounded text-[16px] font-bold tracking-[-0.01em] text-ink">
+            贴纸册
+          </h1>
           <Button
             variant="soft"
             size="sm"

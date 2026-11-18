@@ -43,11 +43,7 @@ export function ComposeBar({ actions }: ComposeBarProps) {
               <Keycap>↩</Keycap>
               <span className="ml-0.5">应用</span>
             </span>
-          ) : (
-            <span className="hidden text-[11px] text-ink-3 min-[1080px]:inline">
-              选中贴纸和文件夹后即可应用
-            </span>
-          )}
+          ) : null}
 
           <Button
             variant="secondary"
