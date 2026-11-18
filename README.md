@@ -11,7 +11,7 @@
 [![macOS](https://img.shields.io/badge/macOS-14%2B-000000?style=flat-square&logo=apple&logoColor=white)](https://www.apple.com/macos/)
 [![Tauri](https://img.shields.io/badge/Tauri-2-24C8DB?style=flat-square&logo=tauri&logoColor=white)](https://tauri.app)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=white)](https://react.dev)
-[![Rust](https://img.shields.io/badge/Rust-1.85%2B-000000?style=flat-square&logo=rust&logoColor=white)](https://www.rust-lang.org)
+[![Rust](https://img.shields.io/badge/Rust-1.88%2B-000000?style=flat-square&logo=rust&logoColor=white)](https://www.rust-lang.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 
 <img src="assets/readme/a1.webp" alt="应用主界面：左侧贴纸册，右侧文件夹浏览器" width="840" />
@@ -104,7 +104,7 @@
 
 - macOS 14 Sonoma 及以上
 - Xcode Command Line Tools：`xcode-select --install`
-- Rust 1.85+：`rustup`（Tauri 需要）
+- Rust 1.88+：`rustup`（Tauri 需要）
 - Node.js 22.12+ 与 pnpm 12+：`corepack enable`
 
 ### 快速开始

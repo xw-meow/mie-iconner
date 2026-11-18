@@ -4,7 +4,7 @@ version = "2.0.0"
 description = "小羊贴纸铺 —— macOS 文件夹图标修改工具"
 authors = ["xw-meow"]
 edition = "2021"
-rust-version = "1.85"
+rust-version = "1.88"
 repository = "https://github.com/xw-meow/mie-iconner"
 
 [lib]
