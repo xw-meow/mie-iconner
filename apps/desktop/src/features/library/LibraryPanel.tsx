@@ -23,7 +23,13 @@ import type { Category, IconItem } from '@/types/api'
 
 export function LibraryPanel() {
   const queryClient = useQueryClient()
-  const { data: library, isLoading, error, refetch } = useLibraryQuery()
+  const {
+    data: library,
+    isLoading,
+    isFetching,
+    error,
+    refetch,
+  } = useLibraryQuery()
   const tab = useUIStore((state) => state.tab)
   const setTab = useUIStore((state) => state.setTab)
   const collapsedMap = useUIStore((state) => state.collapsed)
@@ -114,7 +120,7 @@ export function LibraryPanel() {
   }, [])
 
   return (
-    <section className="paper-panel flex w-[344px] shrink-0 flex-col overflow-hidden rounded-panel">
+    <section className="paper-panel relative flex w-[344px] shrink-0 flex-col overflow-hidden rounded-panel">
       <header className="shrink-0 px-3.5 pb-2.5 pt-3.5">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-baseline gap-2">
@@ -215,6 +221,14 @@ export function LibraryPanel() {
           </>
         )}
       </div>
+
+      {/* 贴纸库刷新时，在面板底部留一条与文件夹面板一致的 pending 提示 */}
+      {isFetching && !isLoading ? (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[2px] animate-pulse-soft bg-gradient-to-r from-transparent via-brand/60 to-transparent"
+        />
+      ) : null}
 
       <ConfirmDialog
         open={pendingCategory !== null}
