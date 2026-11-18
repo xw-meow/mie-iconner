@@ -1,4 +1,5 @@
 pub mod icons;
+pub mod privileged;
 pub mod xattr;
 
 use tauri::AppHandle;

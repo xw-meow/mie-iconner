@@ -1,5 +1,6 @@
 import { convertFileSrc, invoke } from '@tauri-apps/api/core'
 import type {
+  AppItem,
   EnvInfo,
   FolderItem,
   ImportReport,
@@ -34,6 +35,14 @@ export const api = {
 
   thumbnail: (path: string, kind: ThumbKind, version: number) =>
     invoke<string>('thumbnail', { path, kind, version }),
+
+  apps: () => invoke<AppItem[]>('list_apps'),
+
+  applyAppIcon: (iconPath: string, appPath: string, admin = false) =>
+    invoke<void>('apply_app_icon', { iconPath, appPath, admin }),
+
+  restoreAppIcon: (appPath: string, admin = false) =>
+    invoke<void>('restore_app_icon', { appPath, admin }),
 
   importIcons: (paths: string[], category: string) =>
     invoke<ImportReport>('import_icons', { paths, category }),

@@ -33,6 +33,7 @@ libc = "0.2"
 objc2 = "0.6"
 objc2-foundation = { version = "0.3", default-features = false, features = ["std", "NSString", "NSData", "NSObjCRuntime"] }
 objc2-app-kit = { version = "0.3", default-features = false, features = ["std", "NSImage", "NSWorkspace"] }
+plist = "1"
 
 [dev-dependencies]
 tempfile = "3"

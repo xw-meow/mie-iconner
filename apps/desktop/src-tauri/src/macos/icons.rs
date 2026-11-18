@@ -105,6 +105,76 @@ fn be32(data: &[u8], offset: usize) -> Option<usize> {
     Some(u32::from_be_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]) as usize)
 }
 
+/// 同步版本，供 root 管理员 helper（独立 CLI 进程）使用。
+/// 与 async 版本保持相同的两步写入和 Finder 通知，但不依赖 Tauri 主线程调度。
+pub fn apply_icon_sync(icon_path: &Path, target: &Path) -> Result<(), AppError> {
+    image::ImageReader::open(icon_path)
+        .map_err(|error| AppError::io("无法读取贴纸图片", error))?
+        .with_guessed_format()
+        .map_err(|error| AppError::new("unsupported_type", error.to_string()))?
+        .into_dimensions()
+        .map_err(|error| AppError::new("unsupported_type", format!("无法识别图片格式：{error}")))?;
+
+    let target_path = target.to_string_lossy().into_owned();
+    let bytes =
+        std::fs::read(icon_path).map_err(|error| AppError::io("无法读取贴纸图片", error))?;
+
+    objc2::rc::autoreleasepool(|_| {
+        let workspace = objc2_app_kit::NSWorkspace::sharedWorkspace();
+        let path = objc2_foundation::NSString::from_str(&target_path);
+        workspace.setIcon_forFile_options(
+            None,
+            &path,
+            objc2_app_kit::NSWorkspaceIconCreationOptions::empty(),
+        );
+        std::thread::sleep(Duration::from_millis(300));
+
+        let data = objc2_foundation::NSData::from_vec(bytes);
+        let Some(image) =
+            objc2_app_kit::NSImage::initWithData(objc2_app_kit::NSImage::alloc(), &data)
+        else {
+            return Err(AppError::new("unsupported_type", "无法解码贴纸图片"));
+        };
+        let ok = workspace.setIcon_forFile_options(
+            Some(&image),
+            &path,
+            objc2_app_kit::NSWorkspaceIconCreationOptions::empty(),
+        );
+        if ok {
+            notify_workspace(&target_path);
+            Ok(())
+        } else {
+            Err(AppError::new(
+                "apply_failed",
+                "写入图标失败，请检查该目标的访问权限",
+            ))
+        }
+    })
+}
+
+/// 同步还原，供 root 管理员 helper 使用。
+pub fn restore_icon_sync(target: &Path) -> Result<(), AppError> {
+    let target_path = target.to_string_lossy().into_owned();
+    objc2::rc::autoreleasepool(|_| {
+        let workspace = objc2_app_kit::NSWorkspace::sharedWorkspace();
+        let path = objc2_foundation::NSString::from_str(&target_path);
+        let ok = workspace.setIcon_forFile_options(
+            None,
+            &path,
+            objc2_app_kit::NSWorkspaceIconCreationOptions::empty(),
+        );
+        if ok {
+            notify_workspace(&target_path);
+            Ok(())
+        } else {
+            Err(AppError::new(
+                "restore_failed",
+                "还原失败，请检查该目标的访问权限",
+            ))
+        }
+    })
+}
+
 /// 写入自定义图标。两步写：先删再写——已有自定义图标时覆盖写不会被
 /// Finder 桌面采纳（实测旧图标可停留一小时以上），先 setIcon(nil)
 /// 强制系统注销旧图标，间隔 0.3s 再写入才是全新注册。
@@ -167,7 +237,7 @@ pub async fn apply_icon(app: &AppHandle, icon_path: &Path, folder: &Path) -> Res
     } else {
         Err(AppError::new(
             "apply_failed",
-            "写入图标失败，请检查该文件夹的访问权限",
+            "写入图标失败，请检查该目标的访问权限",
         ))
     }
 }
@@ -198,7 +268,7 @@ pub async fn restore_icon(app: &AppHandle, folder: &Path) -> Result<(), AppError
     } else {
         Err(AppError::new(
             "restore_failed",
-            "还原失败，请检查该文件夹的访问权限",
+            "还原失败，请检查该目标的访问权限",
         ))
     }
 }

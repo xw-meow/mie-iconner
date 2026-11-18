@@ -3,6 +3,7 @@ use std::path::{Path, PathBuf};
 use tauri::{AppHandle, Manager, State};
 
 use super::blocking;
+use crate::apps;
 use crate::error::AppError;
 use crate::macos::icons;
 use crate::paths;
@@ -67,6 +68,9 @@ pub async fn thumbnail(
         )
     {
         return Err(AppError::new("invalid_path", "缩略图路径不在贴纸库中"));
+    }
+    if matches!(kind, ThumbKind::App) && !apps::is_app_path(&source, &paths::home_dir()) {
+        return Err(AppError::new("invalid_path", "缩略图路径不是已安装的 App"));
     }
 
     blocking(move || thumbnails::thumbnail_path(&cache, &source, kind, version)).await

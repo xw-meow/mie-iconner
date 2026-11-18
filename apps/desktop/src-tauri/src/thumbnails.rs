@@ -4,6 +4,7 @@ use std::path::Path;
 use image::ImageFormat;
 use serde::Deserialize;
 
+use crate::apps;
 use crate::error::AppError;
 use crate::macos::icons;
 
@@ -18,6 +19,8 @@ pub enum ThumbKind {
     Image,
     /// 文件夹的自定义图标（Icon\r 资源叉里的 icns）
     Folder,
+    /// 已安装 App 的图标：优先自定义图标，否则读 bundle 里的 icns
+    App,
 }
 
 impl ThumbKind {
@@ -25,6 +28,7 @@ impl ThumbKind {
         match self {
             Self::Image => "image",
             Self::Folder => "folder",
+            Self::App => "app",
         }
     }
 }
@@ -61,6 +65,13 @@ pub fn thumbnail_path(
                 .ok_or_else(|| AppError::new("no_custom_icon", "这个文件夹没有自定义图标"))?;
             image::load_from_memory_with_format(&png, ImageFormat::Png).map_err(|error| {
                 AppError::new("decode_failed", format!("无法解压自定义图标：{error}"))
+            })?
+        }
+        ThumbKind::App => {
+            let png = apps::app_icon_png(source)
+                .ok_or_else(|| AppError::new("no_app_icon", "这个 App 没有可读取的图标"))?;
+            image::load_from_memory_with_format(&png, ImageFormat::Png).map_err(|error| {
+                AppError::new("decode_failed", format!("无法解压 App 图标：{error}"))
             })?
         }
     };

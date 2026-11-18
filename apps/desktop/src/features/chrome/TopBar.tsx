@@ -5,6 +5,7 @@ import {
   FolderOpen,
   FolderSearch,
   Info,
+  LayoutGrid,
   MoreHorizontal,
   RefreshCcw,
 } from 'lucide-react'
@@ -17,6 +18,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
 import { IconButton } from '@/components/ui/IconButton'
+import { AppIconDialog } from '@/features/apps/AppIconDialog'
 import { Omnibox } from '@/features/chrome/Omnibox'
 import { AboutDialog } from '@/features/dialogs/AboutDialog'
 import { api } from '@/lib/api'
@@ -32,6 +34,7 @@ export function TopBar() {
   const queryClient = useQueryClient()
   const setAboutOpen = useUIStore((state) => state.setAboutOpen)
   const [refreshOpen, setRefreshOpen] = useState(false)
+  const [appsOpen, setAppsOpen] = useState(false)
 
   const atRoot = !path || path === '/'
 
@@ -94,6 +97,14 @@ export function TopBar() {
       </IconButton>
 
       <IconButton
+        label="修改 App 图标"
+        variant="ghost"
+        onClick={() => setAppsOpen(true)}
+      >
+        <LayoutGrid className="size-4" strokeWidth={1.9} />
+      </IconButton>
+
+      <IconButton
         label="刷新桌面图标"
         variant="ghost"
         loading={restartFinder.isPending}
@@ -132,6 +143,7 @@ export function TopBar() {
         onConfirm={() => restartFinder.mutate()}
       />
       <AboutDialog />
+      <AppIconDialog open={appsOpen} onOpenChange={setAppsOpen} />
     </header>
   )
 }

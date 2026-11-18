@@ -1,3 +1,4 @@
+pub mod apps;
 pub mod env;
 pub mod folders;
 pub mod icons;

@@ -1,5 +1,5 @@
 export type IconSource = 'bundled' | 'custom'
-export type ThumbKind = 'image' | 'folder'
+export type ThumbKind = 'image' | 'folder' | 'app'
 
 export interface IconItem {
   path: string
@@ -34,6 +34,18 @@ export interface FolderItem {
   name: string
   hasCustomIcon: boolean
   iconModified: number | null
+}
+
+export interface AppItem {
+  path: string
+  name: string
+  bundleId: string | null
+  hasCustomIcon: boolean
+  iconModified: number
+  /** 当前用户是否有写入权限；系统应用通常为 false */
+  modifiable: boolean
+  /** 位于 /System 下 */
+  system: boolean
 }
 
 export interface PathSuggestion {

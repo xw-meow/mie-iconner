@@ -42,3 +42,13 @@ export function useSuggestionsQuery(input: string, enabled: boolean) {
     retry: false,
   })
 }
+
+export function useAppsQuery(enabled: boolean) {
+  return useQuery({
+    queryKey: ['apps'],
+    queryFn: api.apps,
+    enabled,
+    staleTime: 30_000,
+    retry: false,
+  })
+}

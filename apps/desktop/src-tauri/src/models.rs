@@ -97,3 +97,19 @@ pub struct ImportReport {
     pub imported: Vec<IconDto>,
     pub failed: Vec<ImportFailure>,
 }
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AppDto {
+    pub path: String,
+    pub name: String,
+    pub bundle_id: Option<String>,
+    /// Finder 自定义图标（和应用本身自带的图标区分）
+    pub has_custom_icon: bool,
+    /// 用作前端缩略图缓存 key；默认图标取 .app 的版本，自定义图标取 Icon\r 的版本
+    pub icon_modified: u64,
+    /// 当前用户是否能写入这个 .app（系统应用通常为 false）
+    pub modifiable: bool,
+    /// 位于 /System 下，界面显示为受系统保护
+    pub system: bool,
+}

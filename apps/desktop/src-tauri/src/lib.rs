@@ -1,3 +1,5 @@
+mod admin_helper;
+mod apps;
 mod commands;
 mod error;
 mod folder;
@@ -13,6 +15,11 @@ mod thumbnails;
 use tauri::Manager;
 
 use state::AppState;
+
+/// 供 main 在启动 Tauri 之前判断是否为管理员 helper 模式。
+pub fn run_admin_helper_if_requested() -> bool {
+    admin_helper::run_if_requested()
+}
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -33,6 +40,9 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            commands::apps::list_apps,
+            commands::apps::apply_app_icon,
+            commands::apps::restore_app_icon,
             commands::env::get_env,
             commands::env::resolve_path,
             commands::env::suggest_paths,
