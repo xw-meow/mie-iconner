@@ -44,6 +44,17 @@ describe('Omnibox', () => {
     useBrowserStore.setState({ path: '/Users/me/Desktop' })
   })
 
+  it('keeps the suggestion menu open after clicking the input', async () => {
+    const user = userEvent.setup()
+    render(<Omnibox />)
+
+    const input = screen.getByRole('combobox')
+    await user.click(input)
+
+    expect(screen.getByRole('listbox')).not.toHaveClass('hidden')
+    expect(screen.getByText('/tmp')).toBeInTheDocument()
+  })
+
   it('navigates to the typed path on Enter', async () => {
     const user = userEvent.setup()
     render(<Omnibox />)

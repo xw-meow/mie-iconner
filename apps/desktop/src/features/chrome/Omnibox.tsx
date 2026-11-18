@@ -105,6 +105,15 @@ export function Omnibox() {
     onSelectedItemChange: ({ selectedItem }) => {
       if (selectedItem) void navigate(selectedItem.path)
     },
+    stateReducer: (_state, { type, changes }) => {
+      // 鼠标点击输入框时，focus 已经先一步 openMenu；
+      // Downshift 默认把紧随其后的 click 当成“再次点击”取反，把刚打开的下拉关掉。
+      // 这里让点击只负责打开，避免“弹出一下又消失”。
+      if (type === useCombobox.stateChangeTypes.InputClick) {
+        return { ...changes, isOpen: true }
+      }
+      return changes
+    },
   })
 
   useEffect(() => {
