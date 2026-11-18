@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- 与应用 UI 一致：中文优先，系统菜单/文件面板跟随系统语言 -->
+	<key>CFBundleDevelopmentRegion</key>
+	<string>zh-Hans</string>
+	<key>CFBundleAllowMixedLocalizations</key>
+	<true/>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.graphics-design</string>
+	<!-- 首次浏览桌面/文稿/下载目录时，系统权限弹窗的说明文案 -->
+	<key>NSDesktopFolderUsageDescription</key>
+	<string>小羊贴纸铺需要读取桌面上的文件夹，以便为它们更换图标。</string>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>小羊贴纸铺需要读取文稿中的文件夹，以便为它们更换图标。</string>
+	<key>NSDownloadsFolderUsageDescription</key>
+	<string>小羊贴纸铺需要读取下载目录中的文件夹，以便为它们更换图标。</string>
+</dict>
+</plist>

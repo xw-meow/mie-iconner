@@ -1,0 +1,456 @@
+@import 'tailwindcss';
+
+/* ============================================================
+   小羊贴纸铺 · 设计 token
+   「暖纸贴纸册」——米白纸底、纯白厚卡、柿子橙作唯一强调色。
+   Tailwind v4 会把这些变量展开成 bg-brand / text-ink-2 等工具类。
+   ============================================================ */
+@theme {
+  --color-brand: #ff5c38;
+  --color-brand-dark: #e84a1f;
+  --color-brand-soft: #ff5c381a;
+  --color-brand-tint: #fff1ec;
+  --color-brand-line: #ffc4b4;
+
+  --color-canvas-top: #fbf7f0;
+  --color-canvas-bottom: #efe6d7;
+
+  --color-surface: #fffdfa;
+  --color-surface-raised: #ffffff;
+
+  --color-ink: #2c2620;
+  --color-ink-2: #6e6457;
+  --color-ink-3: #9b8d79;
+
+  --color-line: #eae2d4;
+  --color-line-strong: #d8cdbb;
+  --color-slot: #ece5d8;
+  --color-hover: #f6f0e6;
+  --color-hover-strong: #efe7d9;
+
+  --color-danger: #d9381e;
+  --color-danger-soft: #fdecea;
+  --color-success: #3f8f5f;
+
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --font-rounded:
+    ui-rounded, 'SF Pro Rounded', -apple-system, BlinkMacSystemFont,
+    'PingFang SC', 'Hiragino Sans GB', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --radius-panel: 18px;
+  --radius-card: 12px;
+  --radius-tile: 10px;
+
+  --shadow-panel:
+    0 1px 2px rgb(80 58 34 / 0.04), 0 20px 44px -30px rgb(80 58 34 / 0.38);
+  --shadow-panel-strong:
+    0 1px 2px rgb(80 58 34 / 0.05), 0 26px 56px -30px rgb(80 58 34 / 0.45);
+  --shadow-lift: 0 10px 24px -14px rgb(80 58 34 / 0.38);
+  --shadow-sticker: 0 8px 18px -10px rgb(122 92 62 / 0.42);
+  --shadow-brand: 0 10px 24px -10px rgb(232 74 31 / 0.55);
+
+  --animate-fade-in: fade-in 0.24s ease both;
+  --animate-pop-in: pop-in 0.34s cubic-bezier(0.2, 0.9, 0.25, 1.15) both;
+  --animate-shimmer: shimmer 1.5s linear infinite;
+  --animate-pulse-soft: pulse-soft 2.2s ease-in-out infinite;
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    overflow: hidden;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--color-ink);
+    background: var(--color-canvas-top);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    user-select: none;
+    cursor: default;
+  }
+
+  input,
+  textarea {
+    user-select: text;
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']) {
+    cursor: pointer;
+  }
+
+  ::selection {
+    background: rgb(255 92 56 / 0.18);
+  }
+
+  :focus-visible {
+    outline: none;
+  }
+}
+
+/* ============================================================
+   Canvas / surfaces
+   ============================================================ */
+.app-canvas {
+  position: relative;
+  background:
+    radial-gradient(1100px 540px at 16% -12%, #fffdf8 0%, transparent 62%),
+    radial-gradient(900px 560px at 104% -4%, #f8f0e3 0%, transparent 56%),
+    linear-gradient(155deg, var(--color-canvas-top) 0%, var(--color-canvas-bottom) 100%);
+}
+
+.paper-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  box-shadow: var(--shadow-panel);
+}
+
+.dot-grid {
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgb(150 130 100 / 0.16) 1px,
+    transparent 0
+  );
+  background-size: 20px 20px;
+  background-position: 10px 10px;
+}
+
+/* ============================================================
+   Scrollbars：macOS overlay 风格，hover 容器才显形
+   ============================================================ */
+.scroll-area {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.scroll-area:hover {
+  scrollbar-color: rgb(120 108 88 / 0.28) transparent;
+}
+
+.scroll-area::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+
+.scroll-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-area::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background-color: transparent;
+  background-clip: content-box;
+}
+
+.scroll-area:hover::-webkit-scrollbar-thumb {
+  background-color: rgb(120 108 88 / 0.28);
+}
+
+.scroll-area::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ============================================================
+   Skeletons
+   ============================================================ */
+.skeleton {
+  background: linear-gradient(100deg, #f1eadf 20%, #f9f4ec 38%, #f1eadf 56%);
+  background-size: 220% 100%;
+  animation: shimmer 1.5s linear infinite;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 140% 0;
+  }
+  to {
+    background-position: -40% 0;
+  }
+}
+
+/* ============================================================
+   Motion
+   ============================================================ */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translateX(-1px);
+  }
+  20%,
+  80% {
+    transform: translateX(2px);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translateX(-4px);
+  }
+  40%,
+  60% {
+    transform: translateX(4px);
+  }
+}
+
+.shake {
+  animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes sticker-pop {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.09);
+  }
+  100% {
+    transform: scale(1.03);
+  }
+}
+
+.sticker-card {
+  transition:
+    transform 180ms cubic-bezier(0.2, 0.9, 0.25, 1.1),
+    box-shadow 180ms ease,
+    border-color 150ms ease,
+    background-color 150ms ease;
+}
+
+.sticker-card:hover {
+  transform: translateY(-2px);
+}
+
+.sticker-card[data-selected='true'] {
+  animation: sticker-pop 0.34s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+  transform: scale(1.03);
+}
+
+.sticker-card[data-selected='true']:hover {
+  transform: scale(1.03) translateY(-1px);
+}
+
+@keyframes folder-pulse {
+  0% {
+    transform: scale(1);
+  }
+  28% {
+    transform: scale(1.08);
+  }
+  58% {
+    transform: scale(0.98);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.folder-card[data-applied='true'] {
+  animation: folder-pulse 0.72s cubic-bezier(0.22, 0.9, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   Radix primitives
+   ============================================================ */
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes overlay-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes dialog-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(4px) scale(0.98);
+  }
+}
+
+.dialog-overlay {
+  animation: overlay-in 0.18s ease both;
+}
+
+.dialog-overlay[data-state='closed'] {
+  animation: overlay-out 0.14s ease both;
+}
+
+.dialog-content {
+  animation: dialog-in 0.24s cubic-bezier(0.2, 0.85, 0.25, 1) both;
+}
+
+.dialog-content[data-state='closed'] {
+  animation: dialog-out 0.14s ease both;
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes menu-out {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.98) translateY(-2px);
+  }
+}
+
+.menu-content {
+  transform-origin: var(--radix-context-menu-content-transform-origin, var(--radix-dropdown-menu-content-transform-origin, top left));
+  animation: menu-in 0.14s cubic-bezier(0.2, 0.8, 0.25, 1) both;
+}
+
+.menu-content[data-state='closed'] {
+  animation: menu-out 0.1s ease both;
+}
+
+@keyframes tooltip-in {
+  from {
+    opacity: 0;
+    transform: translateY(2px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.tooltip-content {
+  animation: tooltip-in 0.12s ease both;
+}
+
+/* ============================================================
+   Sonner：深墨胶囊，替代系统风通知
+   ============================================================ */
+[data-sonner-toaster] {
+  font-family: var(--font-sans) !important;
+}
+
+[data-sonner-toast][data-styled='true'] {
+  background: rgb(44 38 32 / 0.94) !important;
+  color: #fff !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  box-shadow: 0 12px 30px -12px rgb(44 38 32 / 0.55) !important;
+  padding: 9px 16px !important;
+  font-size: 12.5px !important;
+  min-height: 0 !important;
+}
+
+[data-sonner-toast][data-styled='true'] [data-title] {
+  font-weight: 500 !important;
+  letter-spacing: 0.01em;
+}
+
+[data-sonner-toast][data-styled='true'] [data-description] {
+  color: rgb(255 255 255 / 0.68) !important;
+  font-size: 11.5px !important;
+}
+
+[data-sonner-toast][data-styled='true'] [data-icon] {
+  margin-right: 2px;
+}
+
+[data-sonner-toast][data-styled='true'] [data-close-button] {
+  background: rgb(255 255 255 / 0.12) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+}

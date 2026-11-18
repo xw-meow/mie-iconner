@@ -4,3 +4,11 @@
 dist/
 .superpowers/
 docs/
+
+# Tauri / Rust
+target/
+app/src-tauri/gen/
+
+# Node
+node_modules/
+.vite/

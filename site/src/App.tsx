@@ -47,7 +47,7 @@ const features = [
   {
     icon: asset('stickers/paint.png'),
     title: '贴纸库',
-    desc: '100 多张内置贴纸随取随用;也可以把自己的图片拖进来,建成自己的分类。',
+    desc: '120 多张内置贴纸随取随用;也可以把自己的图片拖进来,建成自己的分类。',
   },
   {
     icon: asset('stickers/inspect.png'),
@@ -120,7 +120,7 @@ export default function App() {
           <img className="hero-sticker hero-sticker-2" src={asset('stickers/happy.png')} alt="" aria-hidden onError={handleImgError} />
           <img className="hero-sticker hero-sticker-3" src={asset('stickers/wow.png')} alt="" aria-hidden onError={handleImgError} />
 
-          <span className="hero-badge">macOS 14+ · SwiftUI · 免费开源</span>
+          <span className="hero-badge">macOS 14+ · 原生体验 · 免费开源</span>
           <h1>给文件夹贴上贴纸</h1>
           <p className="hero-sub">
             挑一张喜欢的贴纸,贴到文件夹上——就像逛贴纸铺一样简单。

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "小羊贴纸铺",
+  "mainBinaryName": "mie-iconner",
+  "version": "2.0.0",
+  "identifier": "com.daviant.mie-iconner",
+  "build": {
+    "beforeDevCommand": "pnpm dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "pnpm build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "withGlobalTauri": false,
+    "windows": [
+      {
+        "label": "main",
+        "title": "小羊贴纸铺",
+        "width": 1080,
+        "height": 720,
+        "minWidth": 940,
+        "minHeight": 620,
+        "center": true,
+        "resizable": true,
+        "fullscreen": false,
+        "decorations": true,
+        "titleBarStyle": "Overlay",
+        "hiddenTitle": true,
+        "trafficLightPosition": { "x": 18, "y": 21 },
+        "backgroundColor": "#FAF7F2",
+        "dragDropEnabled": true,
+        "theme": "Light",
+        "visible": true
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; img-src 'self' asset: http://asset.localhost data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self'; connect-src 'self' ipc: http://ipc.localhost; media-src 'self' asset: http://asset.localhost",
+      "devCsp": "default-src 'self'; img-src 'self' asset: http://asset.localhost data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self' 'unsafe-inline'; connect-src 'self' ipc: http://ipc.localhost ws://localhost:1420 http://localhost:1420; media-src 'self' asset: http://asset.localhost",
+      "assetProtocol": {
+        "enable": true,
+        "scope": ["$APPCACHE/**"]
+      }
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["app", "dmg"],
+    "category": "GraphicsAndDesign",
+    "shortDescription": "给 macOS 文件夹贴一张喜欢的图标",
+    "longDescription": "小羊贴纸铺是一款 macOS 文件夹图标修改工具：内置一百多张贴纸，也可以导入自己的图片，选中贴纸和文件夹，一键应用或还原。",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns"
+    ],
+    "resources": {
+      "resources/bundled-icons/": "bundled-icons/"
+    },
+    "macOS": {
+      "minimumSystemVersion": "14.0",
+      "signingIdentity": "-",
+      "dmg": {
+        "windowSize": { "width": 680, "height": 430 },
+        "appPosition": { "x": 190, "y": 205 },
+        "applicationFolderPosition": { "x": 490, "y": 205 }
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 name: Release
 
-# 手动触发:Actions → Release → Run workflow
-# (自动跑 macOS runner 太消耗额度,改为需要发版时手动点)
+# 手动触发：Actions → Release → Run workflow
+# macOS runner 消耗额度较大，发版时手动点。
 on:
   workflow_dispatch:
 
@@ -16,20 +16,46 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Run tests
-        working-directory: app
-        run: swift test
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12
 
-      - name: Package .app
-        run: app/scripts/package-app.sh
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: app/pnpm-lock.yaml
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: app/src-tauri -> target
+
+      - name: Install dependencies
+        working-directory: app
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Rust tests
+        working-directory: app/src-tauri
+        run: cargo test
+
+      - name: Run frontend tests
+        working-directory: app
+        run: pnpm test
+
+      - name: Build universal DMG
+        run: app/scripts/package.sh
 
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          VERSION=$(/usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' app/Sources/mie-iconner/Info.plist)
+          VERSION=$(node -p "require('./app/src-tauri/tauri.conf.json').version")
           TAG="v${VERSION}-build.${GITHUB_RUN_NUMBER}"
-          # --generate-notes 自动以上一个 tag 为起点汇总提交记录
-          gh release create "$TAG" "app/dist/小羊贴纸铺-macOS.dmg" \
+          DMG=$(ls app/src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg | head -1)
+          gh release create "$TAG" "$DMG" \
             --title "小羊贴纸铺 v${VERSION} (build ${GITHUB_RUN_NUMBER})" \
             --generate-notes
