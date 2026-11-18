@@ -19,13 +19,13 @@ export function ComposeBar({ actions }: ComposeBarProps) {
   const ready = canApply
 
   return (
-    <footer className="shrink-0 px-3 pb-3 pt-3">
-      <div
-        className={cn(
-          'paper-panel flex h-[68px] items-center gap-3 rounded-panel px-3.5 transition-[box-shadow,border-color] duration-300',
-          ready && 'border-brand/25 shadow-panel-strong',
-        )}
-      >
+    <footer
+      className={cn(
+        'shrink-0 px-3.5 transition-colors duration-300',
+        ready ? 'bg-[#fff3ec]' : 'bg-[#f7f1e8]',
+      )}
+    >
+      <div className="flex h-[68px] items-center gap-3">
         <StickerSlot icon={icon} />
         <ArrowRight
           className={cn(

@@ -83,7 +83,7 @@ export function FolderPanel({ actions }: FolderPanelProps) {
   }
 
   return (
-    <section className="paper-panel flex min-w-0 flex-1 flex-col overflow-hidden rounded-panel">
+    <section className="flex min-w-0 flex-1 flex-col overflow-hidden bg-surface-raised pb-4">
       <div
         ref={scrollRef}
         onMouseDown={handleBlankMouseDown}

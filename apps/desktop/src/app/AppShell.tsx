@@ -141,11 +141,13 @@ export function AppShell() {
   return (
     <div className="app-canvas flex h-full min-h-0 flex-col overflow-hidden">
       <TopBar />
-      <main className="flex min-h-0 flex-1 gap-3 px-3">
-        <LibraryPanel />
-        <FolderPanel actions={actions} />
+      <main className="paper-panel mx-3 mb-3 flex min-h-0 flex-1 flex-col overflow-hidden rounded-panel">
+        <div className="flex min-h-0 flex-1">
+          <LibraryPanel />
+          <FolderPanel actions={actions} />
+        </div>
+        <ComposeBar actions={actions} />
       </main>
-      <ComposeBar actions={actions} />
       <ImportDialog />
       <DropOverlay />
     </div>
