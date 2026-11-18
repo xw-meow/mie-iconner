@@ -6,27 +6,27 @@ const buttonVariants = cva(
   [
     'relative inline-flex select-none items-center justify-center gap-1.5',
     'whitespace-nowrap font-rounded font-semibold',
-    'transition-[filter,background-color,border-color,color,box-shadow,transform] duration-150',
+    'transition-colors duration-150',
     'outline-none focus-visible:ring-2 focus-visible:ring-brand/35 focus-visible:ring-offset-2 focus-visible:ring-offset-white',
-    'active:scale-[0.97] disabled:pointer-events-none',
+    'disabled:pointer-events-none',
   ],
   {
     variants: {
       variant: {
         primary:
-          'bg-gradient-to-b from-brand to-brand-dark text-white shadow-brand hover:brightness-105 active:brightness-95 disabled:opacity-40 disabled:shadow-none',
+          'bg-brand text-white hover:bg-brand-dark active:bg-brand-dark disabled:opacity-40',
         secondary:
           'border border-line bg-white text-ink hover:border-line-strong hover:bg-hover disabled:opacity-45',
         ghost:
           'text-ink-2 hover:bg-hover hover:text-ink disabled:opacity-40',
         soft: 'bg-brand-tint text-brand hover:bg-brand-soft disabled:opacity-45',
         danger:
-          'bg-danger text-white hover:brightness-105 disabled:opacity-40',
+          'bg-danger text-white hover:bg-danger-dark active:bg-danger-dark disabled:opacity-40',
       },
       size: {
-        sm: 'h-7 rounded-full px-3 text-[12px]',
-        md: 'h-8 rounded-full px-3.5 text-[13px]',
-        lg: 'h-9 rounded-full px-4 text-[13px]',
+        sm: 'h-7 min-w-[48px] rounded-[10px] px-3 text-[12px]',
+        md: 'h-8 min-w-[60px] rounded-[10px] px-3.5 text-[13px]',
+        lg: 'h-9 min-w-[72px] rounded-[10px] px-4 text-[13px]',
         icon: 'size-7 rounded-full',
       },
     },

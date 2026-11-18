@@ -29,6 +29,7 @@
   --color-hover-strong: #efe7d9;
 
   --color-danger: #d9381e;
+  --color-danger-dark: #bf2f18;
   --color-danger-soft: #fdecea;
   --color-success: #3f8f5f;
 
@@ -50,7 +51,6 @@
     0 1px 2px rgb(80 58 34 / 0.05), 0 26px 56px -30px rgb(80 58 34 / 0.45);
   --shadow-lift: 0 10px 24px -14px rgb(80 58 34 / 0.38);
   --shadow-sticker: 0 8px 18px -10px rgb(122 92 62 / 0.42);
-  --shadow-brand: 0 10px 24px -10px rgb(232 74 31 / 0.55);
 
   --animate-fade-in: fade-in 0.24s ease both;
   --animate-pop-in: pop-in 0.34s cubic-bezier(0.2, 0.9, 0.25, 1.15) both;
