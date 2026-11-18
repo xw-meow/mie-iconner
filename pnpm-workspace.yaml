@@ -1,8 +1,13 @@
+packages:
+  - apps/*
+
+# pnpm 12 的依赖构建白名单：只允许确实需要编译的包运行 install 脚本。
 allowBuilds:
   '@parcel/watcher': true
   bufferutil: false
   edgedriver: false
   esbuild: true
+  fsevents: true
   geckodriver: false
   kerberos: false
   utf-8-validate: false

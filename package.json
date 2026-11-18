@@ -1,0 +1,31 @@
+{
+  "name": "mie-iconner",
+  "version": "2.0.0",
+  "private": true,
+  "packageManager": "pnpm@12.14.0",
+  "engines": {
+    "node": ">=22.12.0",
+    "pnpm": ">=12.0.0"
+  },
+  "scripts": {
+    "dev": "pnpm --dir apps/desktop exec tauri dev",
+    "dev:site": "pnpm --dir apps/site dev",
+    "tauri": "pnpm --dir apps/desktop exec tauri",
+    "build": "pnpm build:desktop && pnpm build:site",
+    "build:desktop": "pnpm --dir apps/desktop build",
+    "build:site": "pnpm --dir apps/site build",
+    "preview:desktop": "pnpm --dir apps/desktop preview",
+    "preview:site": "pnpm --dir apps/site preview",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "lint": "pnpm -r --if-present lint",
+    "test": "pnpm test:rust && pnpm test:web",
+    "test:rust": "cargo test --manifest-path apps/desktop/src-tauri/Cargo.toml",
+    "test:web": "pnpm --dir apps/desktop test",
+    "check": "pnpm typecheck && pnpm lint && pnpm test",
+    "clippy": "cargo clippy --manifest-path apps/desktop/src-tauri/Cargo.toml --all-targets",
+    "fmt": "cargo fmt --manifest-path apps/desktop/src-tauri/Cargo.toml",
+    "package": "bash scripts/package-desktop.sh",
+    "package:arm64": "pnpm --dir apps/desktop exec tauri build --bundles dmg",
+    "clean": "cargo clean --manifest-path apps/desktop/src-tauri/Cargo.toml && rm -rf apps/desktop/dist apps/site/dist"
+  }
+}

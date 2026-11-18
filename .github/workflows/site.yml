@@ -1,12 +1,14 @@
 name: Deploy Site
 
-# 官网自动部署:site/ 有改动推上 master 时自动发布到 GitHub Pages
-# (ubuntu runner,公开仓库免费;也可在 Actions → Deploy Site 手动触发)
+# 官网自动部署：apps/site/ 或根 workspace 配置有改动推上 master 时
+# 自动发布到 GitHub Pages（也可在 Actions → Deploy Site 手动触发）
 on:
   push:
     branches: [master]
     paths:
-      - "site/**"
+      - "apps/site/**"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
       - ".github/workflows/site.yml"
   workflow_dispatch:
 
@@ -14,7 +16,7 @@ permissions:
   pages: write
   id-token: write
 
-# 同一时刻只跑一个部署,新的推送顶替排队中的旧部署
+# 同一时刻只跑一个部署，新的推送顶替排队中的旧部署
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -25,27 +27,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: site/package-lock.json
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Install
-        working-directory: site
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Lint
-        working-directory: site
-        run: npm run lint
+        run: pnpm --dir apps/site lint
 
       - name: Build
-        working-directory: site
-        run: npm run build
+        run: pnpm --dir apps/site build
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: site/dist
+          path: apps/site/dist
 
   deploy:
     needs: build

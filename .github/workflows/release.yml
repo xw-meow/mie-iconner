@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-          cache-dependency-path: app/pnpm-lock.yaml
+          cache-dependency-path: pnpm-lock.yaml
 
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -32,30 +32,29 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
         with:
-          workspaces: app/src-tauri -> target
+          workspaces: apps/desktop/src-tauri -> target
 
-      - name: Install dependencies
-        working-directory: app
+      - name: Install workspace dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run Rust tests
-        working-directory: app/src-tauri
-        run: cargo test
+      - name: Typecheck & lint
+        run: |
+          pnpm typecheck
+          pnpm lint
 
-      - name: Run frontend tests
-        working-directory: app
+      - name: Run tests
         run: pnpm test
 
       - name: Build universal DMG
-        run: app/scripts/package.sh
+        run: bash scripts/package-desktop.sh
 
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          VERSION=$(node -p "require('./app/src-tauri/tauri.conf.json').version")
+          VERSION=$(node -p "require('./apps/desktop/src-tauri/tauri.conf.json').version")
           TAG="v${VERSION}-build.${GITHUB_RUN_NUMBER}"
-          DMG=$(ls app/src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg | head -1)
+          DMG=$(ls apps/desktop/src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg | head -1)
           gh release create "$TAG" "$DMG" \
             --title "小羊贴纸铺 v${VERSION} (build ${GITHUB_RUN_NUMBER})" \
             --generate-notes

@@ -1,14 +1,19 @@
-.build/
 .DS_Store
-.swiftpm/
-dist/
-.superpowers/
-docs/
 
-# Tauri / Rust
-target/
-app/src-tauri/gen/
-
-# Node
+# dependencies
 node_modules/
+.pnpm-store/
+package-lock.json
+yarn.lock
+
+# builds
+dist/
+target/
 .vite/
+
+# Tauri generated
+apps/desktop/src-tauri/gen/
+
+# logs
+pnpm-debug.log*
+*.log

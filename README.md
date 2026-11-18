@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="imgs/icon.png" alt="小羊贴纸铺图标" width="140" />
+<img src="assets/icon.png" alt="小羊贴纸铺图标" width="140" />
 
 # 小羊贴纸铺 · mie-iconner
 
@@ -14,7 +14,7 @@
 [![Rust](https://img.shields.io/badge/Rust-1.85%2B-000000?style=flat-square&logo=rust&logoColor=white)](https://www.rust-lang.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 
-<img src="imgs/a1.webp" alt="应用主界面：左侧贴纸册，右侧文件夹浏览器" width="840" />
+<img src="assets/readme/a1.webp" alt="应用主界面：左侧贴纸册，右侧文件夹浏览器" width="840" />
 
 </div>
 
@@ -80,7 +80,7 @@
 在左侧贴纸册选中一张贴纸，在右侧浏览器中选中目标文件夹，点击「应用」（或按 ⌘↩），文件夹图标即刻更换；点击「还原」恢复系统默认图标。右键文件夹还可以直接在访达中显示、拷贝路径，或只对这一个文件夹应用当前贴纸。
 
 <p align="center">
-  <img src="imgs/a2.webp" alt="选中贴纸与文件夹后，底部组合台准备就绪" width="840" />
+  <img src="assets/readme/a2.webp" alt="选中贴纸与文件夹后，底部组合台准备就绪" width="840" />
 </p>
 
 <br />
@@ -91,6 +91,7 @@
 
 | 层 | 选型 |
 | --- | --- |
+| Monorepo | [pnpm workspace](https://pnpm.io/workspaces)（根目录统一命令与锁文件） |
 | 桌面壳 | [Tauri 2](https://tauri.app)（Rust + 系统 WebView） |
 | 前端 | [React 19](https://react.dev) + [Vite 8](https://vite.dev) + TypeScript 6 |
 | 样式 | [Tailwind CSS v4](https://tailwindcss.com) 设计 token + 少量 CSS 动效 |
@@ -110,47 +111,60 @@
 
 ```bash
 git clone git@github.com:xw-meow/mie-iconner.git
-cd mie-iconner/app
-pnpm install
-pnpm tauri dev
+cd mie-iconner
+
+pnpm install       # 安装 apps/* 的全部依赖
+pnpm dev           # 启动桌面应用（Vite + Tauri，前端热更新）
 ```
 
-也可以在仓库根目录直接：
+只想看官网：
 
 ```bash
-make dev          # 启动桌面应用（Vite + Tauri，前端热更新）
+pnpm dev:site
 ```
+
+根目录命令通过 pnpm workspace 转发到对应子包，不需要手动 `cd`。
 
 ### 常用命令
 
 | 命令 | 说明 |
 | --- | --- |
-| `make dev` | 启动桌面应用 |
-| `make test` | 运行 Rust + 前端全部测试 |
-| `make typecheck` | TypeScript 类型检查 |
-| `make lint` | 前端 oxlint |
-| `make build` | 构建当前架构的 release `.app` |
-| `make package` | 构建 universal（arm64 + x86_64）DMG |
-| `make site-dev` | 启动官网开发服务器 |
-| `make site-build` | 构建官网 |
+| `pnpm dev` | 启动桌面应用（Tauri + Vite） |
+| `pnpm dev:site` | 启动官网开发服务器 |
+| `pnpm test` | 运行 Rust + 前端全部测试 |
+| `pnpm test:rust` | 只跑 Rust 单元测试 |
+| `pnpm test:web` | 只跑前端 Vitest |
+| `pnpm typecheck` | 所有 workspace 的 TypeScript 检查 |
+| `pnpm lint` | 所有 workspace 的 oxlint |
+| `pnpm check` | typecheck + lint + test |
+| `pnpm clippy` | Rust clippy |
+| `pnpm build` | 构建桌面前端 + 官网 |
+| `pnpm build:desktop` | 只构建桌面前端 |
+| `pnpm build:site` | 只构建官网 |
+| `pnpm package` | 构建 universal（arm64 + x86_64）DMG |
+| `pnpm package:arm64` | 只构建当前架构 DMG（更快） |
+| `pnpm clean` | 清理 Rust 产物与前端 dist |
 
-直接进入子项目也可以：
+需要直接操作子包时：
 
 ```bash
-cd app
-pnpm test           # Vitest
-pnpm typecheck
-pnpm lint
-cd src-tauri
-cargo test
-cargo clippy --all-targets
+pnpm --dir apps/desktop test
+pnpm --dir apps/desktop exec tauri dev
+cargo test --manifest-path apps/desktop/src-tauri/Cargo.toml
+cargo clippy --manifest-path apps/desktop/src-tauri/Cargo.toml --all-targets
 ```
 
 ### 打包与发布
 
 ```bash
-make package
-# 产物：app/src-tauri/target/universal-apple-darwin/release/bundle/dmg/
+pnpm package
+# 产物：apps/desktop/src-tauri/target/universal-apple-darwin/release/bundle/dmg/
+```
+
+本地只想验证当前架构：
+
+```bash
+pnpm package:arm64
 ```
 
 发布走 GitHub Actions 手动触发（`.github/workflows/release.yml`）：在 Actions → Release → Run workflow，会自动跑测试、构建 universal DMG 并创建 GitHub Release。
@@ -159,9 +173,9 @@ make package
 
 ```
 React 组件 / features
-        │  类型化 IPC 封装（src/lib/api.ts）
+        │  类型化 IPC 封装（apps/desktop/src/lib/api.ts）
         ▼
-Tauri commands（参数校验、线程调度，不含业务逻辑）
+Tauri commands（apps/desktop/src-tauri/src/commands/，参数校验、线程调度，不含业务逻辑）
         │
         ▼
 Rust 领域模块
@@ -195,27 +209,43 @@ macos/          NSWorkspace 写入、Icon\r 资源叉解析、xattr
 ### 仓库结构
 
 ```
-app/                        # macOS 应用
-├── src/                    # React 前端
-│   ├── app/                # 应用壳、启动页、Provider、热键
-│   ├── components/ui/      # 设计系统原语（Button/Dialog/ContextMenu…）
-│   ├── features/           # 按领域拆分的业务组件与 hooks
-│   ├── lib/                # Tauri IPC 封装、路径/颜色工具、事件总线
-│   ├── stores/             # Zustand：浏览路径、选择态、UI 偏好
-│   ├── styles/             # Tailwind v4 主题与动效
-│   └── types/              # 与 Rust DTO 对齐的类型
-├── src-tauri/              # Rust 后端与 Tauri 配置
-│   ├── src/commands/       # 暴露给前端的 IPC command
-│   ├── src/library/        # 贴纸库扫描/导入/配置
-│   ├── src/macos/          # AppKit、资源叉、xattr
-│   ├── resources/          # 内置贴纸
-│   └── tauri.conf.json
-├── assets/                 # 图标源文件
-├── public/                 # 前端静态资源
-└── scripts/package.sh      # universal DMG 打包
-site/                       # 官网（Vite + React，经 GitHub Actions 部署）
-imgs/                       # README 配图
+apps/
+├── desktop/                # macOS 桌面应用（Tauri + React）
+│   ├── src/                # React 前端
+│   │   ├── app/            # 应用壳、启动页、Provider、热键
+│   │   ├── components/ui/  # 设计系统原语（Button/Dialog/ContextMenu…）
+│   │   ├── features/       # 按领域拆分的业务组件与 hooks
+│   │   ├── lib/            # Tauri IPC 封装、路径/颜色工具、事件总线
+│   │   ├── stores/         # Zustand：浏览路径、选择态、UI 偏好
+│   │   ├── styles/         # Tailwind v4 主题与动效
+│   │   └── types/          # 与 Rust DTO 对齐的类型
+│   ├── src-tauri/          # Rust 后端与 Tauri 配置
+│   │   ├── src/commands/   # 暴露给前端的 IPC command
+│   │   ├── src/library/    # 贴纸库扫描/导入/配置
+│   │   ├── src/macos/      # AppKit、资源叉、xattr
+│   │   ├── resources/      # 内置贴纸
+│   │   └── tauri.conf.json
+│   ├── assets/             # 应用图标源文件
+│   ├── public/             # 前端静态资源
+│   └── package.json
+└── site/                   # 官网（Vite + React，GitHub Pages 部署）
+
+assets/                     # README 配图、品牌图标、宣发素材
+├── icon.png
+├── readme/
+└── promo/
+scripts/                    # package-desktop.sh 等仓库级脚本
+package.json                # 根 workspace 快捷命令
+pnpm-workspace.yaml         # workspace 与依赖构建白名单
+pnpm-lock.yaml              # 全仓库统一锁文件
 ```
+
+### Monorepo 约定
+
+- **依赖只从根目录安装**：`pnpm install`，所有子包共享一份 `pnpm-lock.yaml`，避免桌面端和官网各装一套 React/Vite。
+- **命令从根目录发起**：常用动作都在根 `package.json` 的 scripts 里；子包只保留自己的 `dev/build/test/typecheck/lint`。
+- **workspace 包名**：`@mie-iconner/desktop`、`@mie-iconner/site`，需要时可以用 `pnpm --filter` 精确操作。
+- **原生构建仍由 Tauri 驱动**：`pnpm dev` / `pnpm package` 最终会调用 `apps/desktop` 里的 Tauri CLI，不会绕过 Cargo 构建。
 
 ### 自定义图标包
 
@@ -242,7 +272,7 @@ imgs/                       # README 配图
 | `defaultExpanded` | 是否默认展开 | `false` |
 
 <p align="center">
-  <img src="imgs/a3.webp" alt="导入贴纸弹窗：选择已有分类或新建分类" width="840" />
+  <img src="assets/readme/a3.webp" alt="导入贴纸弹窗：选择已有分类或新建分类" width="840" />
 </p>
 
 <br />
