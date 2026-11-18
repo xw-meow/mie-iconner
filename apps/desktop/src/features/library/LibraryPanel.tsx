@@ -114,7 +114,7 @@ export function LibraryPanel() {
   }, [])
 
   return (
-    <section className="paper-panel flex w-[344px] shrink-0 flex-col overflow-hidden rounded-panel">
+    <section className="paper-panel flex w-[344px] shrink-0 flex-col overflow-hidden rounded-panel pb-4">
       <header className="shrink-0 px-3.5 pb-2.5 pt-3.5">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-baseline gap-2">
@@ -150,7 +150,7 @@ export function LibraryPanel() {
       </header>
 
       <div
-        className="scroll-area min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-8"
+        className="scroll-area min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-4"
         onMouseDown={handleBlankMouseDown}
       >
         {isLoading ? (
