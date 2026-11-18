@@ -113,7 +113,7 @@ export function LibraryPanel() {
   }, [])
 
   return (
-    <section className="flex w-[344px] shrink-0 flex-col overflow-hidden bg-canvas-top pb-4">
+    <section className="flex w-[344px] shrink-0 flex-col overflow-hidden bg-canvas-top">
       <header className="shrink-0 px-3.5 pb-2.5 pt-3.5">
         <div className="flex items-center justify-between gap-2">
           <h1 className="font-rounded text-[16px] font-bold tracking-[-0.01em] text-ink">
