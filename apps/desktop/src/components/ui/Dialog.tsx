@@ -36,7 +36,7 @@ export function DialogShell({
         <DialogPrimitive.Overlay className="dialog-overlay fixed inset-0 z-[70] flex items-center justify-center bg-[rgb(44_38_32_/_0.26)] p-6 backdrop-blur-[2px]">
           <DialogPrimitive.Content
             className={cn(
-              'dialog-content relative w-full max-w-[420px] overflow-hidden rounded-[18px] border border-line bg-surface-raised shadow-panel-strong outline-none',
+              'dialog-content relative w-full max-w-[420px] overflow-hidden rounded-panel border border-line bg-surface-raised shadow-panel-strong outline-none',
               className,
             )}
           >
