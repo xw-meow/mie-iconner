@@ -150,7 +150,7 @@ export function LibraryPanel() {
       </header>
 
       <div
-        className="scroll-area min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-4"
+        className="scroll-area min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-8"
         onMouseDown={handleBlankMouseDown}
       >
         {isLoading ? (
