@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useIsFetching, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   ChevronLeft,
   FolderOpen,
@@ -7,7 +7,6 @@ import {
   Info,
   MoreHorizontal,
   RefreshCcw,
-  RefreshCw,
 } from 'lucide-react'
 
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
@@ -34,7 +33,6 @@ export function TopBar() {
   const setAboutOpen = useUIStore((state) => state.setAboutOpen)
   const [refreshOpen, setRefreshOpen] = useState(false)
 
-  const fetching = useIsFetching({ queryKey: ['folders', path] }) > 0
   const atRoot = !path || path === '/'
 
   const restartFinder = useMutation({
@@ -72,17 +70,6 @@ export function TopBar() {
         variant="ghost"
       >
         <ChevronLeft className="size-4" strokeWidth={2.1} />
-      </IconButton>
-
-      <IconButton
-        label="重新载入当前文件夹"
-        variant="ghost"
-        loading={fetching}
-        onClick={() => {
-          if (path) void queryClient.invalidateQueries({ queryKey: ['folders', path] })
-        }}
-      >
-        <RefreshCw className="size-3.5" strokeWidth={2.1} />
       </IconButton>
 
       <div className="mx-1 min-w-0 flex-1">
