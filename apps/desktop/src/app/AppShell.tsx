@@ -8,6 +8,7 @@ import { BootSplash } from '@/app/BootSplash'
 import { ComposeBar } from '@/features/apply/ComposeBar'
 import { useApplyActions } from '@/features/apply/useApplyActions'
 import { TopBar } from '@/features/chrome/TopBar'
+import { DesignStudio } from '@/features/design/DesignStudio'
 import { DropOverlay } from '@/features/dnd/DropOverlay'
 import { useExternalFileDrop } from '@/features/dnd/useExternalFileDrop'
 import { FolderPanel } from '@/features/folders/FolderPanel'
@@ -18,6 +19,7 @@ import { api } from '@/lib/api'
 import { errorText } from '@/lib/errors'
 import { APP_EVENT, emitAppEvent } from '@/lib/events'
 import { parentPath, useBrowserStore } from '@/stores/browser'
+import { useDesignStore } from '@/stores/design'
 import { useSelectionStore } from '@/stores/selection'
 
 const queryClient = new QueryClient({
@@ -58,8 +60,9 @@ export function AppShell() {
   const setPath = useBrowserStore((state) => state.setPath)
   const actions = useApplyActions()
   const [booted, setBooted] = useState(false)
+  const designTarget = useDesignStore((state) => state.target)
 
-  useExternalFileDrop()
+  useExternalFileDrop(!designTarget)
 
   // 启动时校验上次目录；失效则依次回退桌面 / 家目录。
   // 不用 ref 锁：StrictMode 会取消首轮 effect，靠 booted 状态允许重跑。
@@ -87,6 +90,8 @@ export function AppShell() {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
+      // 设计工作台有自己的快捷键；全局目录导航不能穿透过去
+      if (designTarget) return
       const target = event.target as HTMLElement | null
       const editing =
         target?.closest('input, textarea, [contenteditable="true"]') != null
@@ -123,7 +128,7 @@ export function AppShell() {
 
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [actions, setPath])
+  }, [actions, designTarget, setPath])
 
   if (!env) {
     return (
@@ -136,6 +141,10 @@ export function AppShell() {
 
   if (!booted) {
     return <BootSplash error={null} />
+  }
+
+  if (designTarget) {
+    return <DesignStudio key={designTarget.path} folder={designTarget} />
   }
 
   return (

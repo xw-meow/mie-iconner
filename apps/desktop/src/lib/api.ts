@@ -33,6 +33,13 @@ export const api = {
   restoreIcon: (folderPath: string) =>
     invoke<void>('restore_icon', { folderPath }),
 
+  /** 设计画布素材：Rust 转码后的 PNG data URL，避免 canvas 跨源污染 */
+  designAsset: (iconPath: string) =>
+    invoke<string>('design_asset', { iconPath }),
+
+  applyDesign: (pngData: string, folderPath: string) =>
+    invoke<void>('apply_design', { pngData, folderPath }),
+
   thumbnail: (path: string, kind: ThumbKind, version: number) =>
     invoke<string>('thumbnail', { path, kind, version }),
 

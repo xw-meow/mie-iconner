@@ -3,6 +3,7 @@ import {
   Copy,
   FolderOpen,
   FolderSearch,
+  Palette,
   RotateCcw,
   Sparkles,
 } from 'lucide-react'
@@ -19,6 +20,7 @@ import { ThumbImage } from '@/features/thumbnails/ThumbImage'
 import type { ApplyActions } from '@/features/apply/useApplyActions'
 import { cn } from '@/lib/cn'
 import { copyPath, revealInFinder } from '@/lib/system'
+import { useDesignStore } from '@/stores/design'
 import { useSelectionStore } from '@/stores/selection'
 import type { FolderItem } from '@/types/api'
 
@@ -34,6 +36,7 @@ function FolderCardView({ folder, actions, onOpen }: FolderCardProps) {
   )
   const applied = useSelectionStore((state) => state.applied?.path === folder.path)
   const selectFolder = useSelectionStore((state) => state.selectFolder)
+  const openDesign = useDesignStore((state) => state.openDesign)
 
   const hasIcon = folder.hasCustomIcon && folder.iconModified !== null
 
@@ -105,6 +108,13 @@ function FolderCardView({ folder, actions, onOpen }: FolderCardProps) {
       </ContextMenuTrigger>
 
       <ContextMenuContent>
+        <ContextMenuItem
+          icon={<Palette className="size-3.5" />}
+          onSelect={() => openDesign(folder)}
+        >
+          自定义设计
+        </ContextMenuItem>
+        <ContextMenuSeparator />
         <ContextMenuItem
           icon={<FolderOpen className="size-3.5" />}
           onSelect={() => onOpen(folder)}

@@ -139,6 +139,165 @@
 }
 
 /* ============================================================
+   设计工作台：裁切垫、滑杆、透明底与取色纸
+   ============================================================ */
+.design-mat {
+  background-image:
+    linear-gradient(rgb(122 103 79 / 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(122 103 79 / 0.035) 1px, transparent 1px),
+    radial-gradient(circle at 1px 1px, rgb(122 103 79 / 0.14) 1px, transparent 0);
+  background-size:
+    80px 80px,
+    80px 80px,
+    20px 20px;
+  background-position:
+    0 0,
+    0 0,
+    10px 10px;
+}
+
+.design-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 999px;
+  outline: none;
+  background: linear-gradient(
+    to right,
+    var(--color-brand) 0,
+    var(--color-brand) var(--range-fill, 50%),
+    var(--color-slot) var(--range-fill, 50%),
+    var(--color-slot) 100%
+  );
+}
+
+.design-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 2px solid var(--color-brand);
+  background: #fff;
+  box-shadow: 0 1px 3px rgb(80 58 34 / 0.25);
+  cursor: ew-resize;
+}
+
+.design-range::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: 2px solid var(--color-brand);
+  background: #fff;
+  box-shadow: 0 1px 3px rgb(80 58 34 / 0.25);
+  cursor: pointer;
+}
+
+.design-range:focus-visible {
+  box-shadow: 0 0 0 3px rgb(255 92 56 / 0.15);
+}
+
+.design-range-compact {
+  height: 3px;
+}
+
+.design-range-compact::-webkit-slider-thumb {
+  width: 12px;
+  height: 12px;
+}
+
+.transparency-grid {
+  background-color: #fffdfa;
+  background-image:
+    linear-gradient(45deg, #eee7dc 25%, transparent 25%),
+    linear-gradient(-45deg, #eee7dc 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #eee7dc 75%),
+    linear-gradient(-45deg, transparent 75%, #eee7dc 75%);
+  background-size: 16px 16px;
+  background-position:
+    0 0,
+    0 8px,
+    8px -8px,
+    -8px 0;
+}
+
+.transparency-swatch {
+  background-color: #fffdfa;
+  background-image:
+    linear-gradient(45deg, #ddd2c0 25%, transparent 25%),
+    linear-gradient(-45deg, #ddd2c0 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #ddd2c0 75%),
+    linear-gradient(-45deg, transparent 75%, #ddd2c0 75%);
+  background-size: 8px 8px;
+  background-position:
+    0 0,
+    0 4px,
+    4px -4px,
+    -4px 0;
+}
+
+.color-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  outline: none;
+}
+
+.color-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 999px;
+  border: 2px solid #fff;
+  background: #fff;
+  box-shadow:
+    0 0 0 1px rgb(80 58 34 / 0.22),
+    0 2px 5px rgb(80 58 34 / 0.2);
+  cursor: ew-resize;
+}
+
+.color-range::-moz-range-thumb {
+  width: 13px;
+  height: 13px;
+  border-radius: 999px;
+  border: 2px solid #fff;
+  background: #fff;
+  box-shadow:
+    0 0 0 1px rgb(80 58 34 / 0.22),
+    0 2px 5px rgb(80 58 34 / 0.2);
+  cursor: ew-resize;
+}
+
+.color-range:focus-visible {
+  box-shadow: 0 0 0 3px rgb(255 92 56 / 0.15);
+}
+
+.alpha-range {
+  background-image:
+    var(--alpha-gradient),
+    linear-gradient(45deg, #e7dfd2 25%, transparent 25%),
+    linear-gradient(-45deg, #e7dfd2 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #e7dfd2 75%),
+    linear-gradient(-45deg, transparent 75%, #e7dfd2 75%);
+  background-size:
+    auto,
+    8px 8px,
+    8px 8px,
+    8px 8px,
+    8px 8px;
+  background-position:
+    0 0,
+    0 0,
+    0 4px,
+    4px -4px,
+    -4px 0;
+  background-color: #fff;
+}
+
+/* ============================================================
    Scrollbars：macOS overlay 风格，hover 容器才显形
    ============================================================ */
 .scroll-area {

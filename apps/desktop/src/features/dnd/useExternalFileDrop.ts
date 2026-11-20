@@ -21,13 +21,14 @@ function categoryAt(position: { x: number; y: number }): string | null {
  * 拖拽经过时高亮目标分类；松手后带着文件直接打开导入弹窗。
  * 用 Tauri 的原生 drag-drop 事件（HTML5 File API 拿不到真实路径）。
  */
-export function useExternalFileDrop() {
+export function useExternalFileDrop(enabled = true) {
   const setActive = useDragStore((state) => state.setActive)
   const setCategory = useDragStore((state) => state.setCategory)
   const reset = useDragStore((state) => state.reset)
   const openImport = useImportStore((state) => state.openImport)
 
   useEffect(() => {
+    if (!enabled) return
     let unlisten: (() => void) | undefined
     let cancelled = false
 
@@ -62,5 +63,5 @@ export function useExternalFileDrop() {
       unlisten?.()
       reset()
     }
-  }, [openImport, reset, setActive, setCategory])
+  }, [enabled, openImport, reset, setActive, setCategory])
 }

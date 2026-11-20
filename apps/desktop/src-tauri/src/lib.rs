@@ -43,6 +43,8 @@ pub fn run() {
             commands::apps::list_apps,
             commands::apps::apply_app_icon,
             commands::apps::restore_app_icon,
+            commands::design::design_asset,
+            commands::design::apply_design,
             commands::env::get_env,
             commands::env::resolve_path,
             commands::env::suggest_paths,

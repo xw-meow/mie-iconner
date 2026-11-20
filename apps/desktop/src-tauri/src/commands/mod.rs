@@ -1,4 +1,5 @@
 pub mod apps;
+pub mod design;
 pub mod env;
 pub mod folders;
 pub mod icons;
